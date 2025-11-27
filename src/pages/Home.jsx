@@ -5,8 +5,10 @@ import rock from "../assets/sinatra-ocean-rock.png";
 import ContactForm from "../components/ContactForm";
 import Footers from "../components/Footers";
 import OurApproach from "../components/OurApproach";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <>
       <section className="relative w-screen h-screen overflow-hidden">
@@ -53,7 +55,14 @@ const Home = () => {
             <img src={sinatraLogo} className="h-10" />
             <ul className="flex gap-10 text-black text-sm">
               <li>Home</li>
-              <li>About</li>
+              <li>
+                <button
+                  onClick={() => navigate("/about")}
+                  className="cursor-pointer hover:text-gray-600"
+                >
+                  About
+                </button>
+              </li>
               <li>Companies</li>
               <li>Contact</li>
             </ul>
@@ -78,7 +87,7 @@ const Home = () => {
 
       {/* <OurApproach/> */}
       <ContactForm />
-      <Footers/>
+      <Footers />
     </>
   );
 };
