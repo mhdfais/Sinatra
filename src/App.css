@@ -1,0 +1,58 @@
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.hero-bg {
+  background-image: url('assets/sinatra-home-hero.jpg');
+  background-size: 100%;        /* slight zoom (exact screenshot look) */
+  background-position: center -900px;  /* moves image UP → rock looks perfect */
+  background-repeat: no-repeat;
+}
+
+/* Lion icon should appear from inside rock */
+.lion-wrapper {
+  left: 50%;
+  top: 41%;                     /* PERFECT positioning above the rock */
+  transform: translateX(-50%);
+  animation: riseUp 1.5s ease-out 1s forwards;
+  opacity: 0;
+}
+
+/* Lion animation */
+@keyframes riseUp {
+  from { transform: translate(-50%, 40px); opacity: 0; }
+  to   { transform: translate(-50%, 0); opacity: 1; }
+}
+
+/* Navbar animation */
+.nav-animate {
+  animation: navDrop 1s ease-out 1.2s forwards;
+  opacity: 0;
+}
+@keyframes navDrop {
+  from { transform: translateY(-40px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  0% { transform: translateY(-40px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.9s ease-out forwards;
+}
+.animate-delay-1000 {
+  animation-delay: 1s;
+}
+
+
+section.scrolled #sinatra-bg {
+  transform: scale(1.1);
+}
