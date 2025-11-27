@@ -41,7 +41,7 @@ export default function EssenceSection() {
         ref={bgRef}
         className="absolute inset-0 bg-cover bg-center bg-no-repeat will-change-transform"
         style={{
-          backgroundImage: `url('/src/assets/sinatra-stars-bg.jpg')`,
+          backgroundImage: `url('/assets/sinatra-stars-bg.jpg')`,
         }}
       />
 

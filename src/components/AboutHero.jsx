@@ -14,7 +14,7 @@ export default function AboutHero() {
     const textRef = useRef(null);
     const navRef = useRef(null);
     const navigate = useNavigate();
-    const [active, setActive] = useState("about");
+    // const [active, setActive] = useState("about");
     const { pathname } = useLocation();
 
     useEffect(() => {
@@ -112,27 +112,27 @@ export default function AboutHero() {
         <div
           ref={bgRef}
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('/src/assets/sinatra-stars-bg.jpg')` }}
+          style={{ backgroundImage: `url('/assets/sinatra-stars-bg.jpg')` }}
         />
 
         {/*  LAND (bottom layer) */}
           <img
             ref={landRef}
-            src="/src/assets/sinatra-about-land.png"
+            src="/assets/sinatra-about-land.png"
             className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-65 max-w-none z-10"
           />
 
           {/*  MAIN MOUNTAIN (middle layer) */}
           <img
             ref={mountainRef}
-            src="/src/assets/sinatra-about-rock.png"
+            src="/assets/sinatra-about-rock.png"
             className="absolute bottom-50 left-1/2 -translate-x-1/2 w-full h-45 object-cover max-w-none z-10"
           />
 
           {/*  TOP ROCK (front-most) */}
           <img
             ref={topRockRef}
-            src="/src/assets/sinatra-about-toprock.png"
+            src="/assets/sinatra-about-toprock.png"
             className="absolute bottom-27 left-1/2 -translate-x-1/2 h-85 w-full max-w-none z-10"
           />
 
@@ -142,7 +142,7 @@ export default function AboutHero() {
           ref={navRef}
           className="absolute top-0 left-0 w-full flex items-center justify-between px-10 py-5  text-white text-sm z-[40] opacity-0"
         >
-          <img src="/src/assets/sinatra-logo2.png" className="h-13" />
+          <img src="/assets/sinatra-logo2.png" className="h-13" />
 
           <div className="flex gap-12">
             {[
