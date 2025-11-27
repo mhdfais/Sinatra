@@ -64,7 +64,7 @@ const ContactForm = () => {
       <div
         className="w-[40%] p-10 relative"
         style={{
-          backgroundImage: "url('/assets/sinatra-contact-pattern.jpg')",
+          backgroundImage: `url(${pattern})`,
           backgroundSize: "cover",
         }}
       >

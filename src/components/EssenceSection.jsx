@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import starbg from '../assets/sinatra-stars-bg.jpg'
 
 export default function EssenceSection() {
   const contentRef = useRef(null);
@@ -41,7 +42,7 @@ export default function EssenceSection() {
         ref={bgRef}
         className="absolute inset-0 bg-cover bg-center bg-no-repeat will-change-transform"
         style={{
-          backgroundImage: `url('/assets/sinatra-stars-bg.jpg')`,
+          backgroundImage: `url(${starbg})`,
         }}
       />
 

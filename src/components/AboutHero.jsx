@@ -2,6 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLocation, useNavigate } from "react-router-dom";
+import bgStars from '../assets/sinatra-stars-bg.jpg'
+import land from '../assets/sinatra-about-land.png'
+import mountain from '../assets/sinatra-about-rock.png'
+import toprock from '../assets/sinatra-about-toprock.png'
+import logo2 from '../assets/sinatra-logo2.png'
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -112,27 +117,27 @@ export default function AboutHero() {
         <div
           ref={bgRef}
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('/assets/sinatra-stars-bg.jpg')` }}
+          style={{ backgroundImage: `url(${bgStars})` }}
         />
 
         {/*  LAND (bottom layer) */}
           <img
             ref={landRef}
-            src="/assets/sinatra-about-land.png"
+            src={land}
             className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-65 max-w-none z-10"
           />
 
           {/*  MAIN MOUNTAIN (middle layer) */}
           <img
             ref={mountainRef}
-            src="/assets/sinatra-about-rock.png"
+            src={mountain}
             className="absolute bottom-50 left-1/2 -translate-x-1/2 w-full h-45 object-cover max-w-none z-10"
           />
 
           {/*  TOP ROCK (front-most) */}
           <img
             ref={topRockRef}
-            src="/assets/sinatra-about-toprock.png"
+            src={toprock}
             className="absolute bottom-27 left-1/2 -translate-x-1/2 h-85 w-full max-w-none z-10"
           />
 
@@ -142,7 +147,7 @@ export default function AboutHero() {
           ref={navRef}
           className="absolute top-0 left-0 w-full flex items-center justify-between px-10 py-5  text-white text-sm z-[40] opacity-0"
         >
-          <img src="/assets/sinatra-logo2.png" className="h-13" />
+          <img src={logo2} className="h-13" />
 
           <div className="flex gap-12">
             {[
