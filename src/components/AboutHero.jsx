@@ -159,7 +159,7 @@ export default function AboutHero() {
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className={`transition ${
+                className={`cursor-pointer transition ${
                   pathname === item.path
                     ? "text-[#D8BF4A] underline"
                     : "text-white"
