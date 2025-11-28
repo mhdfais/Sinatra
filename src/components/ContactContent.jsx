@@ -23,14 +23,14 @@ export default function ContactSection() {
     tl.fromTo(
       bgRef.current,
       { scale: 1 },
-      { scale: 1.3, duration: 1.2, ease: "power2.out", delay: 1 }
+      { scale: 1.3, duration: 1.2, ease: "power2.out", delay: 0.5 }
     );
 
     // Navbar comes from top
     tl.fromTo(
       navRef.current,
       { y: -40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1.3, ease: "power3.out", delay: 1 },
+      { y: 0, opacity: 1, duration: 1.3, ease: "power3.out", delay: 0.5 },
       0
     );
 
@@ -38,7 +38,7 @@ export default function ContactSection() {
     tl.fromTo(
       contentRef.current,
       { yPercent: 100, opacity: 0 },
-      { yPercent: 0, opacity: 1, duration: 1.3, ease: "power2.out", delay: 1 },
+      { yPercent: 0, opacity: 1, duration: 1.3, ease: "power2.out", delay: 0.5 },
       0
     );
     const scroller = contentRef.current;
