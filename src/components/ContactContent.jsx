@@ -153,7 +153,7 @@ export default function ContactSection() {
         className="relative z-20 h-full overflow-y-scroll"
         style={{ scrollbarWidth: "none" }}
       >
-        <div className=" px-6 md:px-32 pt-24 pb-32 text-white">
+        <div className=" px-6 md:px-32 pt-24 pb-32 text-white ">
           {/* --- Section 1 --- */}
           <div className="min-h-screen flex flex-col items-center text-center pt-10 pb-10">
             <h1 className=" font-semibold mb-5 " style={{ fontSize: "2.6rem" }}>

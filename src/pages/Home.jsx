@@ -7,13 +7,14 @@ import Footers from "../components/Footers";
 import OurApproach from "../components/OurApproach";
 import { useNavigate } from "react-router-dom";
 import HomeHero from "../components/HomeHero";
+import DesertSection from "../components/DesertSection";
 
 const Home = () => {
   const navigate = useNavigate();
   return (
     <>
     <HomeHero/>
-      
+      <DesertSection/>
 
       {/* <OurApproach/> */}
       <ContactForm />

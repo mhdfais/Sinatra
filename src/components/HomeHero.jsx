@@ -68,8 +68,9 @@ export default function HomeHero() {
       <div
         className="absolute inset-0 bg-cover bg-center z-0"
         style={{ backgroundImage: `url(${bgImage})` }}
-      /><div
-  className="
+      />
+      <div
+        className="
     absolute bottom-0 left-0 w-full h-[30%]
     pointer-events-none
     bg-gradient-to-t
@@ -77,14 +78,14 @@ export default function HomeHero() {
     to-transparent
     z-10
   "
-></div>
+      ></div>
 
       {/* NAVBAR */}
       <nav
         ref={navRef}
         className="absolute top-0 left-0 w-full flex items-center justify-between px-10 py-5  text-white text-sm z-[50] opacity-0"
       >
-        <img src={logo2} className="h-14 "  />
+        <img src={logo2} className="h-14 " />
 
         <div className="flex gap-12">
           {[
@@ -148,10 +149,7 @@ export default function HomeHero() {
         </h1>
 
         {/* RIGHT TEXT */}
-        <p
-          ref={rightTextRef}
-          className="ml-auto max-w-sm text-black"
-        >
+        <p ref={rightTextRef} className="ml-auto max-w-sm text-black">
           Sinatra Holding is where foresight and ideas come into play. We are
           home to several emerging market leaders, each offering distinct
           products, services, and opportunities.
