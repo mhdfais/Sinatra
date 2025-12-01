@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import starbg from "../assets/sinatra-stars-bg.jpg";
-import { div } from "three/tsl";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -90,6 +89,26 @@ export default function EssenceSection() {
         className="absolute inset-0 bg-cover bg-center bg-no-repeat will-change-transform"
         style={{ backgroundImage: `url(${starbg})` }}
       />
+      <div
+          className="
+          absolute top-0 left-0 w-full h-[20%]
+          pointer-events-none
+          bg-gradient-to-b
+          from-black
+          to-transparent
+          z-30
+        "
+        />
+         <div
+          className="
+    absolute bottom-0 left-0 w-full h-[10%]
+    pointer-events-none
+    bg-gradient-to-t
+    from-black
+    to-transparent
+    z-30
+  "
+        ></div>
 
       {/* SCROLLABLE CONTENT */}
       <div
@@ -100,7 +119,7 @@ export default function EssenceSection() {
         {/* BLOCK 1 */}
         <div className="h-screen grid grid-rows-2 text-white px-30">
           <div className="flex items-center">
-            <h2 className="text-4xl font-bold">
+            <h2 className="text-5xl font-bold">
               The Essence of Sinatra <br /> Holdings
             </h2>
           </div>
@@ -108,13 +127,13 @@ export default function EssenceSection() {
           <div className="flex items-center justify-end">
             <p className="max-w-xl leading-relaxed text-right">
               Founded in 2010 and based in Dubai, Sinatra Holding is the
-              umbrella for a growing portfolio of premium B2B and B2C brands.
-              Our strength is derived from the diversity of our
-              investments—spanning mobility, hospitality, events, consulting,
-              and more—and a unifying ethos of excellence and integrity.
-              Facebook+2SignalHire+2 With a team of experienced leaders and
-              dedicated professionals, we partner with growth-oriented
-              entrepreneurs to scale enterprises across markets and geographies.
+              umbrella <br /> for a growing portfolio of premium B2B and B2C brands.
+              Our <br /> strength is derived from the diversity of our
+              investments—spanning <br /> mobility, hospitality, events, consulting,
+              and more—and a unifying <br /> ethos of excellence and integrity.
+              Facebook+2SignalHire+2 <br /> With a team of experienced leaders and
+              dedicated professionals, <br /> we partner with growth-oriented
+              entrepreneurs to scale enterprises <br /> across markets and geographies.
             </p>
           </div>
         </div>
@@ -122,18 +141,18 @@ export default function EssenceSection() {
         {/* BLOCK 2 */}
         <div className="h-screen grid grid-rows-2 text-white px-30">
           <div className="flex items-center">
-            <h2 className="text-4xl font-bold">Our Endeavors</h2>
+            <h2 className="text-5xl font-bold">Our Endeavors</h2>
           </div>
 
           <div className="flex items-center justify-end">
             <p className="max-w-xl leading-relaxed text-right">
-              We provide strategic capital, shared services, brand stewardship
+              We provide strategic capital, shared services, brand stewardship <br />
               and operational support to our affiliated companies. Our model is
-              to let each business maintain its market-specific identity and
-              agility—while benefiting from the Sinatra Holding backbone of
-              governance, capabilities and strategic oversight. Whether it’s
-              launching innovative services, entering new markets, or optimizing
-              operations, we act as a partner of choice for ventures looking to
+              to <br /> let each business maintain its market-specific identity and
+              agility— <br />while benefiting from the Sinatra Holding backbone of
+              governance, <br /> capabilities and strategic oversight. <br /> Whether it’s
+              launching innovative services, entering new markets, <br /> or optimizing
+              operations, we act as a partner of choice for ventures <br /> looking to
               scale and make a positive impact.
             </p>
           </div>

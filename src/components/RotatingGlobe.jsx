@@ -6,7 +6,7 @@ export default function RotatingGlobe() {
       <img 
         src={globe1} 
         alt="Globe"
-        className="w-[380px] h-[380px] animate-spin-slow"
+        className="w-[500px] h-[500px] animate-spin-slow"
         style={{
           animation: 'rotate 20s linear infinite'
         }}

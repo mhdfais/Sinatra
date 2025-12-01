@@ -156,7 +156,7 @@ export default function ContactSection() {
         <div className=" px-6 md:px-32 pt-24 pb-32 text-white ">
           {/* --- Section 1 --- */}
           <div className="min-h-screen flex flex-col items-center text-center pt-10 pb-10">
-            <h1 className=" font-semibold mb-5 " style={{ fontSize: "2.6rem" }}>
+            <h1 className=" font-semibold mb-5 text-6xl" >
               Contact Us
             </h1>
             <p className=" max-w-xl  leading-5">
@@ -206,7 +206,7 @@ export default function ContactSection() {
           {/* --- Section 2 --- */}
           <div className=" flex flex-col items-center text-center ">
             {/* CONTACT DETAILS */}
-            <div className="flex items-center flex-col mt-10 space-y-6">
+            <div className="flex items-center flex-col mt-10 space-y-8">
               <div className="flex gap-2 items-center">
                 <svg
                   width="20"

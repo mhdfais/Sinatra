@@ -23,7 +23,7 @@ const Home = () => {
       <MountainSection />
       <JourneySection />
       <NewsInsights />
-      <OurApproach />
+      {/* <OurApproach /> */}
       <ContactForm />
       <Footers />
     </>

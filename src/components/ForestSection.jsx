@@ -146,7 +146,7 @@ export default function ForestSection() {
         className="absolute inset-0 z-10 overflow-y-scroll pt-16 px-10"
         style={{ scrollbarWidth: "none" }}
       >
-        <h1 className="text-3xl font-bold mb-10 text-black">Our Values</h1>
+        <h1 className="text-4xl font-bold mb-10 text-black">Our Values</h1>
 
         <div className="flex justify-end w-full">
           <div className="w-[55%] pr-6">

@@ -129,29 +129,29 @@ export default function MountainSection() {
       {/* INTERNAL SCROLL CONTENT */}
       <div
         ref={contentRef}
-        className="absolute inset-0 z-10 overflow-y-scroll px-10 pt-20"
+        className="absolute inset-0 z-10 overflow-y-scroll px-10 pt-35 "
         style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
       >
         {/* STATS */}
         <div className="w-full text-center text-black mb-35">
-          <div className="flex justify-center gap-16 text-xl font-medium">
-            <div>
-              <span className="text-3xl font-bold">14</span>
+          <div className="flex justify-center gap-40 text-xl font-medium items-center">
+            <div className="font-normal text-2xl leading-5 text-[#313438]">
+              <span className="text-4xl font-semibold text-black">14</span>
               <br />
-              Years Experience
+              Years <br /> Experience
             </div>
-            <div>
-              <span className="text-3xl font-bold">+25</span>
+            <div className="font-normal text-2xl text-[#313438]">
+              <span className="text-4xl font-semibold text-black">+25</span>
               <br />
               Companies
             </div>
-            <div>
-              <span className="text-3xl font-bold">+200</span>
+            <div className="font-normal text-2xl text-[#313438]">
+              <span className="text-4xl font-semibold text-black">+200</span>
               <br />
               Investments
             </div>
-            <div>
-              <span className="text-3xl font-bold">+120</span>
+            <div className="font-normal text-2xl text-[#313438]">
+              <span className="text-4xl font-semibold text-black">+120</span>
               <br />
               Teams
             </div>
@@ -160,25 +160,25 @@ export default function MountainSection() {
 
         {/* COMPANY LOGOS */}
         <div className="w-full text-center text-black pb-20">
-          <h2 className="text-3xl font-bold mb-20">Our Companies</h2>
+          <h2 className="text-4xl font-bold mb-20">Our Companies</h2>
 
           <div className="flex justify-between  opacity-90 px-20">
-            <img src={swaplogo} className="h-12 filter invert brightness-100" />
+            <img src={swaplogo} className="h-15 filter invert brightness-100" />
             <img
               src={wattchargelogo}
-              className="h-12 filter invert brightness-100"
+              className="h-15 filter invert brightness-100"
             />
-            <img src={bmntech} className="h-12 filter invert brightness-100" />
+            <img src={bmntech} className="h-15 filter invert brightness-100" />
             <img
               src={wattchargelogo}
-              className="h-12 filter invert brightness-100"
+              className="h-15 filter invert brightness-100"
             />
-            <img src={swaplogo} className="h-12 filter invert brightness-100" />
+            <img src={swaplogo} className="h-15 filter invert brightness-100" />
           </div>
         </div>
 
         {/* EXTRA SPACE FOR SCROLL */}
-        <div className="pb-[50vh]" />
+        <div className="pb-[45vh]" />
       </div>
     </section>
     </div>

@@ -1,6 +1,6 @@
 export default function NewsInsights() {
   return (
-    <section className="w-full h-screen bg-black text-white  pb-8 px-25 ">
+    <section className="w-full h-screen bg-black text-white  pb-8 px-45 ">
       {/* Section Title */}
       <h2 className="text-4xl font-semibold mb-8">
         News & Insights
@@ -67,7 +67,7 @@ export default function NewsInsights() {
 /* ---------------------------- Card Component ---------------------------- */
 function NewsCard({ tag, title, date }) {
   return (
-    <div className="p-8 flex flex-col justify-between border-b">
+    <div className="p-6 flex flex-col justify-between border-b">
       <div>
         {/* Tag */}
         <span className="

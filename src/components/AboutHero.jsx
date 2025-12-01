@@ -44,7 +44,7 @@ export default function AboutHero() {
       tl.fromTo(
         textRef.current,
         { opacity: 0, y: 150 },
-        { opacity: 1, y: -50, duration: 1.8, ease: "power2.out" },
+        { opacity: 1, y: -75, duration: 1.8, ease: "power2.out" },
         "-=1.4"
       );
       
@@ -176,13 +176,13 @@ export default function AboutHero() {
           ref={textRef}
           className="absolute inset-0 z-8 flex flex-col justify-center items-center text-center text-white"
         >
-          <h1 className="font-medium leading-12" style={{ fontSize: "2.7rem" }}>
+          <h1 className="font-medium leading-16 text-6xl" >
             Redefining Excellence <br /> Across Industries
           </h1>
           <p className="mt-4 max-w-xl text-sm opacity-90">
-            At Sinatra Holding, we envision a world where opportunity meets
-            innovation. Guided by our core belief in sustainable growth, we strive
-            to build companies that create value—economically, socially and
+            At Sinatra Holding, we envision a world where opportunity <br /> meets
+            innovation. Guided by our core belief in sustainable <br /> growth, we strive
+            to build companies that create value— <br /> economically, socially and
             environmentally.
           </p>
         </div>

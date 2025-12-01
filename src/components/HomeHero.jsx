@@ -144,15 +144,15 @@ export default function HomeHero() {
         {/* LEFT TEXT */}
         <h1
           ref={leftTextRef}
-          className="text-black text-5xl font-bold opacity-0"
+          className="text-black text-6xl font-bold opacity-0 leading-16"
         >
           Building <br /> The Future
         </h1>
 
         {/* RIGHT TEXT */}
-        <p ref={rightTextRef} className="ml-auto max-w-sm text-black">
-          Sinatra Holding is where foresight and ideas come into play. We are
-          home to several emerging market leaders, each offering distinct
+        <p ref={rightTextRef} className="ml-auto max-w-sm text-black text-right font-semibold">
+          Sinatra Holding is where foresight and ideas <br /> come into play. We are
+          home to several <br /> emerging market leaders, each offering <br /> distinct
           products, services, and opportunities.
         </p>
       </div>
