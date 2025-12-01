@@ -110,31 +110,32 @@ export default function HomeHero() {
       </nav>
 
       {/* LION ICON (behind rock) */}
-      <img
+     <img
         ref={lionRef}
         src={lionIcon}
         className="
-          absolute w-[13vw]
-          left-1/2 top-[34%]
+          absolute w-[200px] md:w-[13vw] sm:w-[150px]
+          left-1/2 top-[34%] md:top-[30%] sm:top-[25%]
           -translate-x-1/2
           opacity-0
           z-10
-        filter invert brightness-90
+          filter invert brightness-90
         "
       />
 
       {/* ROCK IMG */}
       <img
-        // ref={rockRef}
         src={rock}
         className="
           absolute 
-          w-[40vw]
-          left-[40%] 
-          top-[33%] 
-          -translate-x-[35%]
-          -translate-y-[20%]
+          w-full md:w-[40vw] sm:w-full
+          left-[47%]
+          top-[33%] md:top-[31%] sm:top-[25%]
+          -translate-x-1/2
+          -translate-y-[20%] md:-translate-y-[15%] sm:-translate-y-[10%]
           z-20
+          max-w-none
+          h-auto
         "
       />
 

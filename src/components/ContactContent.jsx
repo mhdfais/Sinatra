@@ -16,7 +16,7 @@ export default function ContactSection() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  // 🔥 Entry Animation on Mount
+  //  Entry Animation on Mount
   useEffect(() => {
     const tl = gsap.timeline();
 

@@ -1,10 +1,16 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import starbg from '../assets/sinatra-stars-bg.jpg'
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import starbg from "../assets/sinatra-stars-bg.jpg";
+import { div } from "three/tsl";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function EssenceSection() {
+  const sectionRef = useRef(null);
   const contentRef = useRef(null);
   const bgRef = useRef(null);
+  const pinTriggerRef = useRef(null);
 
   useEffect(() => {
     const content = contentRef.current;
@@ -12,15 +18,11 @@ export default function EssenceSection() {
 
     const onScroll = () => {
       const maxScroll = content.scrollHeight - content.clientHeight;
-      const progress = content.scrollTop / maxScroll; // 0 → 1
+      const progress = content.scrollTop / maxScroll;
 
-      // Smooth zoom mapping
       const targetZoom =
-        progress < 0.5
-          ? 1 + progress * 0.25 // zoom in (1 → 1.125)
-          : 1.125 - (progress - 0.5) * 0.25; // zoom out (1.125 → 1)
+        progress < 0.5 ? 1 + progress * 0.25 : 1.125 - (progress - 0.5) * 0.25;
 
-      // SMOOTH GSAP tween
       gsap.to(bg, {
         scale: targetZoom,
         duration: 0.3,
@@ -32,36 +34,77 @@ export default function EssenceSection() {
     return () => content.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const section = sectionRef.current;
+    const content = contentRef.current;
+
+    if (!section || !content) return;
+
+    content.style.overflowY = "hidden";
+
+    const getPinEnd = () =>
+      "+=" + (Math.max(content.scrollHeight, window.innerHeight) + 50);
+
+    const trigger = ScrollTrigger.create({
+      trigger: section,
+      start: "top top",
+      end: getPinEnd,
+      pin: true,
+        pinReparent: true,
+      pinSpacing: true,
+      anticipatePin: 1,
+
+      onEnter: () => {
+        content.style.overflowY = "auto";
+      },
+      onLeave: () => {
+        content.style.overflowY = "hidden";
+      },
+      onEnterBack: () => {
+        content.style.overflowY = "auto";
+      },
+      onLeaveBack: () => {
+        content.style.overflowY = "hidden";
+      },
+    });
+
+    pinTriggerRef.current = trigger;
+
+    setTimeout(() => ScrollTrigger.refresh(true), 150);
+
+    return () => {
+      if (pinTriggerRef.current) pinTriggerRef.current.kill();
+      ScrollTrigger.refresh();
+    };
+  }, []);
+
   return (
+    <div>
     <section
-      id="essence-section"
+      ref={sectionRef}
       className="relative w-full h-screen overflow-hidden"
     >
-      {/* FIXED BACKGROUND */}
+      {/* BACKGROUND */}
       <div
         ref={bgRef}
         className="absolute inset-0 bg-cover bg-center bg-no-repeat will-change-transform"
-        style={{
-          backgroundImage: `url(${starbg})`,
-        }}
+        style={{ backgroundImage: `url(${starbg})` }}
       />
 
       {/* SCROLLABLE CONTENT */}
       <div
         ref={contentRef}
-        className="relative z-10 h-screen w-full overflow-y-scroll"
-        style={{ scrollbarWidth: "none" }}
+        className="absolute inset-0 z-10 h-full overflow-hidden px-10"
+        style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
       >
         {/* BLOCK 1 */}
         <div className="h-screen grid grid-rows-2 text-white px-30">
-          {/* ROW 1 → LEFT HEADING */}
           <div className="flex items-center">
-            <h2 className="text-5xl font-bold">
+            <h2 className="text-4xl font-bold">
               The Essence of Sinatra <br /> Holdings
             </h2>
           </div>
 
-          {/* ROW 2 → RIGHT PARAGRAPH */}
           <div className="flex items-center justify-end">
             <p className="max-w-xl leading-relaxed text-right">
               Founded in 2010 and based in Dubai, Sinatra Holding is the
@@ -78,12 +121,10 @@ export default function EssenceSection() {
 
         {/* BLOCK 2 */}
         <div className="h-screen grid grid-rows-2 text-white px-30">
-          {/* ROW 1 → LEFT HEADING */}
           <div className="flex items-center">
-            <h2 className="text-5xl font-bold">Our Endeavors</h2>
+            <h2 className="text-4xl font-bold">Our Endeavors</h2>
           </div>
 
-          {/* ROW 2 → RIGHT PARAGRAPH */}
           <div className="flex items-center justify-end">
             <p className="max-w-xl leading-relaxed text-right">
               We provide strategic capital, shared services, brand stewardship
@@ -99,5 +140,6 @@ export default function EssenceSection() {
         </div>
       </div>
     </section>
+    </div>
   );
 }

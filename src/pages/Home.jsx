@@ -8,15 +8,22 @@ import OurApproach from "../components/OurApproach";
 import { useNavigate } from "react-router-dom";
 import HomeHero from "../components/HomeHero";
 import DesertSection from "../components/DesertSection";
+import ForestSection from "../components/ForestSection";
+import MountainSection from "../components/MountainSection";
+import JourneySection from "../components/JourneySection";
+import NewsInsights from "../components/NewsInsights";
 
 const Home = () => {
   const navigate = useNavigate();
   return (
     <>
-    <HomeHero/>
-      <DesertSection/>
-
-      {/* <OurApproach/> */}
+      <HomeHero />
+      <DesertSection />
+      <ForestSection />
+      <MountainSection />
+      <JourneySection />
+      <NewsInsights />
+      <OurApproach />
       <ContactForm />
       <Footers />
     </>
