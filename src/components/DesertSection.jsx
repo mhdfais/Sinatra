@@ -10,7 +10,7 @@ export default function DesertSection() {
   const desertRef = useRef(null);
   const contentRef = useRef(null);
   const bgRef = useRef(null);
-  const pinTriggerRef = useRef(null); // store ScrollTrigger instance
+  const pinTriggerRef = useRef(null); 
 
   // ===== PAGE LOAD ANIMATION =====
   useEffect(() => {
@@ -77,7 +77,7 @@ export default function DesertSection() {
       end: getPinEnd,
       pin: true,
       pinSpacing: true,
-      anticipatePin: 1,
+      anticipatePin: 0,
       scrub: false, // we want native internal scrolling, not scrubbed animation
       onEnter: () => {
         // enable internal scroll when pinned

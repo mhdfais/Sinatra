@@ -72,7 +72,7 @@ export default function ForestSection() {
       end: getPinEnd,
       pin: true,
       pinSpacing: true,
-      anticipatePin: 1,
+      anticipatePin: 0,
 
       onEnter: () => {
         content.style.overflowY = "auto";

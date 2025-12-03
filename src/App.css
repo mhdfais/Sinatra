@@ -3,13 +3,23 @@ html, body {
   max-width: 100%;
   width: 100%;
 }
+html {
+  scroll-behavior: smooth;
+}
 body{
   background-color: black;
+  font-family: 'Roobert', sans-serif;
 }
 
 * {
   box-sizing: border-box;
 }
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 @keyframes rotate {
   from {
     transform: rotate(0deg);
@@ -23,3 +33,11 @@ body{
   z-index: 10;
 }
 
+@font-face {
+  font-family: 'Roobert';
+  src: url('./fonts/RoobertCollectionVF-TRIAL.woff2') format('woff2'),
+       url('./fonts/RoobertCollectionVF-TRIAL.ttf') format('truetype');
+  font-weight: 1 999; /* because this is a variable font */
+  font-style: normal;
+  font-display: swap;
+}

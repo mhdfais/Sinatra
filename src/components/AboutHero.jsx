@@ -75,7 +75,8 @@ export default function AboutHero() {
       trigger: sectionEl,
       start: "top top",
       end: "+=150%",   // slightly longer scroll
-      scrub: true,     // <- THIS is what makes them move *with scroll*
+     scrub: 1, 
+      pin: false, 
     },
   });
 

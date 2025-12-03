@@ -24,7 +24,7 @@ export default function EssenceSection() {
       trigger: section,
       start: "top 80%", // starts before fully reaching section
       end: "top top",
-      scrub: true,
+      scrub: 1,
     }
   });
 
