@@ -103,7 +103,7 @@ export default function ContactSection() {
       id="contact-section"
       className="relative h-screen w-full overflow-hidden"
     >
-      {/* 🌌 FIXED BACKGROUND */}
+      {/*  FIXED BACKGROUND */}
       <div
         ref={bgRef}
         className="absolute inset-0 bg-cover bg-center"
@@ -118,7 +118,7 @@ export default function ContactSection() {
         }}
       ></div>
 
-      {/* 🔝 NAVBAR */}
+      {/*  NAVBAR */}
       <nav
         ref={navRef}
         className="absolute top-0 left-0 w-full flex items-center justify-between px-10 py-5  text-white text-sm z-[40] opacity-0"
@@ -147,7 +147,7 @@ export default function ContactSection() {
         </div>
       </nav>
 
-      {/* 📜 SCROLLABLE CONTENT */}
+      {/*  SCROLLABLE CONTENT */}
       <div
         ref={contentRef}
         className="relative z-20 h-full overflow-y-scroll"

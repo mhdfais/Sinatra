@@ -5,23 +5,31 @@ import rock from "../assets/sinatra-ocean-rock.png";
 import ContactForm from "../components/ContactForm";
 import Footers from "../components/Footers";
 import OurApproach from "../components/OurApproach";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import HomeHero from "../components/HomeHero";
 import DesertSection from "../components/DesertSection";
 import ForestSection from "../components/ForestSection";
 import MountainSection from "../components/MountainSection";
 import JourneySection from "../components/JourneySection";
 import NewsInsights from "../components/NewsInsights";
+import { useEffect } from "react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const Home = () => {
-  const navigate = useNavigate();
+ 
+
+
+
   return (
     <>
       <HomeHero />
       <DesertSection />
+      
       <ForestSection />
-      <MountainSection />
-      <JourneySection />
+      <div className="relative">
+        <MountainSection />
+        <JourneySection />
+      </div>
       <NewsInsights />
       {/* <OurApproach /> */}
       <ContactForm />

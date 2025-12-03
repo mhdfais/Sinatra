@@ -39,6 +39,7 @@ export default function DesertSection() {
 
   // ===== PIN + INTERNAL SCROLL LOGIC =====
   useEffect(() => {
+    
     const section = sectionRef.current;
     const content = contentRef.current;
 
@@ -50,7 +51,7 @@ export default function DesertSection() {
 
     const getPinEnd = () => {
       // adding a small buffer (50) to avoid off-by-one on some devices
-      return `+=${Math.max(content.scrollHeight, window.innerHeight) + 50}`;
+      return `+=${window.innerHeight}`;
     };
 
     gsap.fromTo(
@@ -65,6 +66,7 @@ export default function DesertSection() {
           trigger: sectionRef.current,
           start: "top 40%", // when 35% of DesertSection enters screen
           toggleActions: "play none none reverse",
+          
         },
       }
     );
@@ -199,15 +201,15 @@ export default function DesertSection() {
           </p>
 
           {/* content block that can be scrolled */}
-          <div className="w-full max-w-7xl mx-auto py-16 px-6 pb-65">
+          <div className="w-full max-w-7xl mx-auto py-16 px-6 pb-57">
             <div className="flex justify-between items-center gap-16">
               {/* LEFT COLUMN */}
               <div className="flex flex-col w-1/2 max-w-2xl">
-                <h2 className="text-4xl font-bold mb-6">
+                <h2 className="text-4xl font-bold mb-4">
                   Brands under Sinatra <br /> Holding include
                 </h2>
 
-                <p className=" text-black font-semibold">
+                <p className="text-black font-semibold leading-6">
                   Our head office is located in the heart of Dubai, U.A.E. This <br />
                   allows us to have excellent access to the entire MENA region <br /> –
                   this places us at a strategic advantage since we are also <br /> in

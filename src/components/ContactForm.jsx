@@ -14,7 +14,7 @@ const styles = {
 
 const ContactForm = () => {
   return (
-    <div className="w-full bg-[#0F0F0F] text-white flex ">
+    <div className="relative w-full bg-[#0F0F0F] text-white flex z-10">
       {/* LEFT SIDE — 60% */}
       <div className="w-[60%] px-9 py-4">
         <h2 className="text-3xl font-bold mb-2">Get in Touch</h2>

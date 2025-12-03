@@ -8,8 +8,13 @@ import AboutHero from '../components/AboutHero'
 const About = () => {
   return (
    <>
-   <AboutHero/>
-   <EssenceSection/>
+    <div className='relative'>
+        <AboutHero />
+        {/* Essence must start BELOW Hero */}
+        {/* <div className="relative z-0"> */}
+          <EssenceSection />
+        {/* </div> */}
+      </div>
    <OurApproach/>
    <ContactForm/>
    <Footers/>

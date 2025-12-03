@@ -1,6 +1,6 @@
 export default function OurApproach() {
   return (
-    <section className="w-full h-screen bg-black text-white py-10 px-6 md:px-20 lg:px-32">
+    <section className="relative w-full h-screen bg-black text-white py-10 px-6 md:px-20 lg:px-32 z-10">
       
       {/* Section Title */}
       <h2 className="text-5xl font-semibold mb-20">Our Approach</h2>

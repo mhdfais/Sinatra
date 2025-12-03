@@ -73,6 +73,7 @@ const timelineData = [
 
 export default function JourneySection() {
   const blocksRef = useRef([]);
+  
 
   useEffect(() => {
     blocksRef.current.forEach((block, index) => {
@@ -100,7 +101,7 @@ export default function JourneySection() {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen bg-black text-white pt-8 pb-20">
+    <section  id="journey-section"  className="relative w-full min-h-screen bg-black text-white pt-8 pb-20">
       {/* Title */}
       <div className="relative w-full h-[70vh] overflow-hidden flex justify-center">
         {/* Title overlapping on top of globe */}

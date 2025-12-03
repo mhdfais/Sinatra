@@ -8,7 +8,7 @@ import footerLogo from "../assets/sinatra-footer-logo.png";
 
 export default function Footers() {
   return (
-    <footer className="bg-black text-white w-full">
+    <footer className="relative bg-black text-white w-full z-10">
       {/* ─── TOP SECTION ─────────────────────────────── */}
       <div className="flex justify-between items-start px-15 pt-8 pb-6">
         {/* LEFT: LOGO */}

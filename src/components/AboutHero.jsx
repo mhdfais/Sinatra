@@ -61,51 +61,52 @@ export default function AboutHero() {
       
     }, []);
 
-    // useEffect(() => {
-    //   const sectionEl = sectionRef.current;
-    //   const landEl = landRef.current;
-    //   const mountainEl = mountainRef.current;
-    //   const topRockEl = topRockRef.current;
-    //   const nextSection = document.querySelector("#essence-section");
+    useEffect(() => {
+  const sectionEl = sectionRef.current;
+  const landEl = landRef.current;
+  const mountainEl = mountainRef.current;
+  const topRockEl = topRockRef.current;
+  const nextSection = document.querySelector("#essence-section");
 
-    //   if (!sectionEl || !landEl || !mountainEl || !topRockEl) {
-    //     return;
-    //   }
+  if (!sectionEl || !landEl || !mountainEl || !topRockEl) return;
 
-    //   const scrollTl = gsap.timeline({
-    //     scrollTrigger: {
-    //       trigger: sectionEl,
-    //       start: "top top",
-    //       end: "+=120%",
-    //       scrub: true,
-    //       pin: true,
-    //       anticipatePin: 0.6,
-    //     },
-    //   });
+  const scrollTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: sectionEl,
+      start: "top top",
+      end: "+=150%",   // slightly longer scroll
+      scrub: true,     // <- THIS is what makes them move *with scroll*
+    },
+  });
 
-    //   scrollTl.to(
-    //     [landEl, mountainEl, topRockEl],
-    //     {
-    //       y: -180,
-    //       ease: "none",
-    //     },
-    //     0
-    //   );
+  // Mountains moving up
+  scrollTl.to(
+    [landEl, mountainEl, topRockEl],
+    {
+      y: -180,
+      ease: "none",
+    },
+    0.8
+  );
 
-    //   if (nextSection) {
-    //     scrollTl.fromTo(
-    //       nextSection,
-    //       { y: "55vh" },
-    //       { y: "-5vh", ease: "none" },
-    //       0
-    //     );
-    //   }
+  // Make the next section move up with the mountains
+  if (nextSection) {
+    scrollTl.to(
+      nextSection,
+      {
+        y: 0,    // same amount as mountains
+        ease: "none",
+      },
+      0.5
+    );
+  }
 
-    //   return () => {
-    //     scrollTl.scrollTrigger?.kill();
-    //     scrollTl.kill();
-    //   };
-    // }, []);
+  return () => {
+    scrollTl.scrollTrigger?.kill();
+    scrollTl.kill();
+  };
+}, []);
+
 
     return (
       <section
@@ -116,7 +117,7 @@ export default function AboutHero() {
         {/*  Background Stars */}
         <div
           ref={bgRef}
-          className="absolute inset-0 bg-cover bg-center"
+          className="fixed inset-0 bg-cover bg-center z-0"
           style={{ backgroundImage: `url(${bgStars})` }}
         />
 
@@ -174,7 +175,7 @@ export default function AboutHero() {
         {/*  Hero Text (BEHIND top rock) */}
         <div
           ref={textRef}
-          className="absolute inset-0 z-8 flex flex-col justify-center items-center text-center text-white"
+          className="fixed inset-0 z-8 flex flex-col justify-center items-center text-center text-white"
         >
           <h1 className="font-medium leading-16 text-6xl" >
             Redefining Excellence <br /> Across Industries
