@@ -82,6 +82,7 @@ export default function DesertSection() {
       onEnter: () => {
         // enable internal scroll when pinned
         content.style.overflowY = "auto";
+         content.style.scrollBehavior = "smooth";
       },
       onLeave: () => {
         // leaving downward — disable internal scroll so page continues
@@ -91,6 +92,7 @@ export default function DesertSection() {
       onEnterBack: () => {
         // coming back up into the pinned area
         content.style.overflowY = "auto";
+         content.style.scrollBehavior = "smooth";
       },
       onLeaveBack: () => {
         content.style.overflowY = "hidden";
@@ -176,11 +178,13 @@ export default function DesertSection() {
         <div
           ref={contentRef}
           className="absolute inset-0 z-10 flex flex-col items-center px-6 pt-10 h-full"
-          style={{
+           style={{
             // start hidden; GSAP will toggle between 'hidden' and 'auto'
             overflowY: "hidden",
             scrollbarWidth: "none", // firefox
             WebkitOverflowScrolling: "touch", // smooth touch scrolling
+            scrollBehavior: "smooth", // Add smooth scrolling
+            // overscrollBehavior: "contain", // Prevent scroll chaining
           }}
         >
           {/* main heading + intro */}

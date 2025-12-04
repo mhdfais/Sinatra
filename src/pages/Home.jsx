@@ -12,28 +12,55 @@ import ForestSection from "../components/ForestSection";
 import MountainSection from "../components/MountainSection";
 import JourneySection from "../components/JourneySection";
 import NewsInsights from "../components/NewsInsights";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
+import gsap from "gsap";
 
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 const Home = () => {
- 
+  const smootherRef = useRef(null);
+  useEffect(() => {
+    // Create ScrollSmoother instance
+    smootherRef.current = ScrollSmoother.create({
+      wrapper: "#smooth-wrapper",
+      content: "#smooth-content",
+      smooth: 1.2, // inertia amount
+      effects: true, // enables parallax
+    });
 
+    // Refresh ScrollTrigger after ScrollSmoother is created
+    // This ensures all ScrollTrigger instances work properly with ScrollSmoother
+    ScrollTrigger.refresh();
 
+    // Cleanup on unmount
+    return () => {
+      if (smootherRef.current) {
+        smootherRef.current.kill();
+        smootherRef.current = null;
+      }
+      ScrollTrigger.refresh();
+    };
+  }, []);
 
   return (
     <>
-      <HomeHero />
-      <DesertSection />
-      
-      <ForestSection />
-      <div className="relative">
-        <MountainSection />
-        <JourneySection />
+      <div id="smooth-wrapper">
+        <div id="smooth-content">
+          <HomeHero />
+          <DesertSection />
+
+          <ForestSection />
+          <div className="relative">
+            <MountainSection />
+            <JourneySection />
+          </div>
+          <NewsInsights />
+          {/* <OurApproach /> */}
+          <ContactForm />
+          <Footers />
+        </div>
       </div>
-      <NewsInsights />
-      {/* <OurApproach /> */}
-      <ContactForm />
-      <Footers />
     </>
   );
 };

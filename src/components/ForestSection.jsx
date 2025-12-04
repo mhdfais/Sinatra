@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import forestFront from "../assets/sinatra-forest.png";
 import forestBack from "../assets/sinatra-forest-sky.png";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,6 +16,13 @@ export default function ForestSection() {
   const pinTriggerRef = useRef(null);
 
   useEffect(() => {
+
+     ScrollSmoother.create({
+    smooth: 3,    // bigger = smoother
+    effects: true,
+    content: contentRef.current,
+  });
+
     const content = contentRef.current;
     // if (!backgroundRef.current || !foregroundRef.current ||!contentRef) {
     //   console.log('not')
@@ -73,6 +81,7 @@ export default function ForestSection() {
       pin: true,
       pinSpacing: true,
       anticipatePin: 0,
+      
 
       onEnter: () => {
         content.style.overflowY = "auto";
@@ -96,7 +105,25 @@ export default function ForestSection() {
       },
     });
 
+    // gsap.set(background, { transformOrigin: "center top" });
+
     pinTriggerRef.current = trigger;
+     window.forestPin = trigger;
+
+    //     gsap.set(background, { transformOrigin: "center center" });
+
+    // const bgScroll = gsap.to(background, {
+    //   scale: 1.5,
+    //   y: "-10vh",
+    //   ease: "none",
+    //   scrollTrigger: {
+    //     trigger: content,
+    //     scroller: content,
+    //     start: "top top",
+    //     end: "bottom bottom",
+    //     scrub: true,
+    //   }
+    // });
 
     setTimeout(() => ScrollTrigger.refresh(true), 150);
 
@@ -106,8 +133,84 @@ export default function ForestSection() {
         pinTriggerRef.current = null;
       }
       ScrollTrigger.refresh();
+      // bgScroll.kill();
     };
   }, []);
+
+   useEffect(() => {
+    const forestImg = foregroundRef.current;
+    const forestSection = sectionRef.current;
+
+    const wait = setInterval(() => {
+      if (!window.forestPin) return; // Wait for pin to exist
+      clearInterval(wait);
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: forestSection,
+          start: () => window.forestPin.end, // start AFTER internal scroll
+          end: "+=100%", // zoom duration
+          scrub: 1.2,
+        },
+      });
+
+      tl.to(forestImg, {
+        y:-150,
+        scale: 1.8,
+        ease: "none",
+      });
+    }, 30);
+
+    return () => clearInterval(wait);
+  }, []);
+
+  useEffect(() => {
+    const content = contentRef.current;
+    const bg = backgroundRef.current;
+
+    const onScroll = () => {
+      const maxScroll = content.scrollHeight - content.clientHeight;
+      const progress = content.scrollTop / maxScroll;
+
+      const targetZoom = 1.18 - progress * 0.15;
+
+      gsap.to(bg, {
+        scale: targetZoom,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+    };
+
+    content.addEventListener("scroll", onScroll);
+    return () => content.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+  const content = contentRef.current;
+  const fg = foregroundRef.current;
+
+  const onScroll = () => {
+    const maxScroll = content.scrollHeight - content.clientHeight;
+    const progress = content.scrollTop / maxScroll;
+
+    // Smooth wobble movement
+    const wobbleX = Math.sin(progress * Math.PI * 11) * 2 ;   // left-right sway (px)
+    // const wobbleRot = Math.sin(progress * Math.PI * 4) * 1.5; // small rotation (deg)
+
+    gsap.to(fg, {
+      scale:1.01,
+      x: wobbleX,
+      // rotate: wobbleRot,
+      
+      duration: 0.2,
+      ease: "power2.out",
+    });
+  };
+
+  content.addEventListener("scroll", onScroll);
+  return () => content.removeEventListener("scroll", onScroll);
+}, []);
+
 
   // gsap.set("#mountain-section", { y: "100vh" });
 
@@ -160,20 +263,20 @@ export default function ForestSection() {
         className="relative w-full h-screen overflow-hidden"
       >
         {/* TOP GRADIENT */}
-        <div className="absolute top-0 left-0 w-full h-[15%] bg-gradient-to-b from-white to-transparent z-30 pointer-events-none" />
+        <div className="absolute top-0 left-0 w-full h-[12%] bg-gradient-to-b from-white to-transparent z-30 pointer-events-none" />
 
         {/* BACKGROUND — MOUNTAINS + FOG */}
         <img
           ref={backgroundRef}
           src={forestBack}
-          className="absolute inset-0 w-full h-[160vh] z-0"
+          className="absolute inset-0 w-full h-[120vh] object-cover z-0"
         />
 
         {/* FOREGROUND — TREES */}
         <img
           ref={foregroundRef}
           src={forestFront}
-          className="absolute bottom-0 left-0 w-full h-[100vh] z-30 pointer-events-none"
+          className="absolute bottom-0 left-0 w-full h-[115vh] z-30 pointer-events-none"
         />
         <div
           className="
@@ -189,7 +292,7 @@ export default function ForestSection() {
         {/* CONTENT — SCROLLS BEHIND FOREST */}
         <div
           ref={contentRef}
-          className="absolute inset-0 z-10 overflow-y-scroll pt-16 px-10"
+          className="absolute inset-0 z-10 overflow-y-scroll pt-10 px-10 scroll-smooth"
           style={{ scrollbarWidth: "none" }}
         >
           <h1 className="text-4xl font-bold mb-10 text-black">Our Values</h1>
@@ -260,7 +363,7 @@ export default function ForestSection() {
                   </p>
                 </div>
                 {/* Ensure space at end so scroll completes */}
-                <div className="col-span-2 pb-[38vh]" />
+                <div className="col-span-2 pb-[45vh]" />
               </div>
             </div>
           </div>

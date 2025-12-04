@@ -1,4 +1,4 @@
-import React from 'react'
+
 import Footers from '../components/Footers'
 import ContactForm from '../components/ContactForm'
 import OurApproach from '../components/OurApproach'
@@ -8,13 +8,13 @@ import AboutHero from '../components/AboutHero'
 const About = () => {
   return (
    <>
-    <div className='relative'>
+    {/* <div className='relative'> */}
         <AboutHero />
         {/* Essence must start BELOW Hero */}
         {/* <div className="relative z-0"> */}
           <EssenceSection />
         {/* </div> */}
-      </div>
+      {/* </div> */}
    <OurApproach/>
    <ContactForm/>
    <Footers/>

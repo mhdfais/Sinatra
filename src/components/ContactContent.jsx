@@ -97,6 +97,27 @@ export default function ContactSection() {
     });
   }, []);
 
+  useEffect(() => {
+    const content = contentRef.current;
+    const bg = bgRef.current;
+
+    const onScroll = () => {
+      const maxScroll = content.scrollHeight - content.clientHeight;
+      const progress = content.scrollTop / maxScroll;
+
+   const targetZoom = 1.18 - progress * 0.15; 
+
+      gsap.to(bg, {
+        scale: targetZoom,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+    };
+
+    content.addEventListener("scroll", onScroll);
+    return () => content.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <section
       ref={sectionRef}

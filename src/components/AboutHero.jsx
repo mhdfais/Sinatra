@@ -116,10 +116,11 @@ export default function AboutHero() {
         className="relative w-full h-screen overflow-hidden bg-black"
       >
         {/*  Background Stars */}
+        
         <div
           ref={bgRef}
           className="fixed inset-0 bg-cover bg-center z-0"
-          style={{ backgroundImage: `url(${bgStars})` }}
+          style={{ backgroundImage: `url(${bgStars})`, willChange: 'transform'   }}
         />
 
         {/*  LAND (bottom layer) */}

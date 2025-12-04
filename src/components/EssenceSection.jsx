@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import starbg from "../assets/sinatra-stars-bg.jpg";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,6 +12,8 @@ export default function EssenceSection() {
   const contentRef = useRef(null);
   const bgRef = useRef(null);
   const pinTriggerRef = useRef(null);
+
+ 
 
   useEffect(() => {
   const bg = bgRef.current;
@@ -108,6 +111,7 @@ export default function EssenceSection() {
   }, []);
 
   return (
+    
     <div className="relative z-10">
       <section
         id="essence-section"
