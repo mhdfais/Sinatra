@@ -5,6 +5,7 @@ import Footers from "./Footers";
 import logo2 from "../assets/sinatra-logo2.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import starbg from "../assets/sinatra-stars-bg.jpg";
+import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,7 +18,32 @@ export default function ContactSection() {
   const { pathname } = useLocation();
 
   //  Entry Animation on Mount
-  useEffect(() => {
+ useEffect(() => {
+    const scroller = contentRef.current;
+
+    // ----------------------------------------------------
+    // 1. Initialize Lenis for the internal scroller
+    // ----------------------------------------------------
+    const lenis = new Lenis({
+      // Tell Lenis to use contentRef as its scrolling wrapper
+      wrapper: scroller,
+      content: scroller,
+      duration: 1.2, // Adjust duration for desired smoothness (1.2s is a good starting point)
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // High-performance easing function
+    });
+
+    // Link Lenis scroll to ScrollTrigger
+    lenis.on("scroll", ScrollTrigger.update);
+
+    // Animation Frame Loop to update Lenis continuously
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+    // ----------------------------------------------------
+
+    // Initial Entry Animation
     const tl = gsap.timeline();
 
     tl.fromTo(
@@ -36,35 +62,36 @@ export default function ContactSection() {
 
     // Content rises up
     tl.fromTo(
-      contentRef.current,
+      scroller,
       { yPercent: 100, opacity: 0 },
       { yPercent: 0, opacity: 1, duration: 1.3, ease: "power2.out", delay: 0.5 },
       0
     );
-    const scroller = contentRef.current;
 
-    let lastScroll = 0;
-
-    ScrollTrigger.scrollerProxy(scroller, {
-      scrollTop(value) {
-        return arguments.length
-          ? (scroller.scrollTop = value)
-          : scroller.scrollTop;
-      },
-      getBoundingClientRect() {
-        return {
-          top: 0,
-          left: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        };
-      },
-    });
-
+    // Set ScrollTrigger defaults to use the Lenis-driven internal scroller
     ScrollTrigger.defaults({
       scroller: scroller,
     });
 
+    // ----------------------------------------------------
+    // 2. Background Zoom (Replaces second useEffect)
+    // Now a smooth, performant ScrollTrigger animation
+    // ----------------------------------------------------
+    gsap.to(bgRef.current, {
+        // We go from initial scale of 1.3 (from tl) to a slightly smaller scale
+        scale: 1.05, 
+        ease: "none", // Linear scroll-linked movement
+        scrollTrigger: {
+            // The trigger must be the element whose height dictates the scroll
+            trigger: scroller.children[0],
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true, // Ties animation progress directly to scrollbar
+        }
+    });
+    // ----------------------------------------------------
+    
+    // Navbar Hide/Show Logic
     ScrollTrigger.create({
       trigger: scroller,
       start: 0,
@@ -82,41 +109,45 @@ export default function ContactSection() {
         }
 
         // scrolling up → show ONLY if at TOP
-        else {
-          if (current <= 10) {
-            gsap.to(navRef.current, {
-              y: 0,
-              duration: 0.6,
-              ease: "power3.out",
-            });
-          }
+        else if (current <= 10) {
+          gsap.to(navRef.current, {
+            y: 0,
+            duration: 0.6,
+            ease: "power3.out",
+          });
         }
-
-        lastScroll = current;
       },
     });
-  }, []);
 
-  useEffect(() => {
-    const content = contentRef.current;
-    const bg = bgRef.current;
-
-    const onScroll = () => {
-      const maxScroll = content.scrollHeight - content.clientHeight;
-      const progress = content.scrollTop / maxScroll;
-
-   const targetZoom = 1.18 - progress * 0.15; 
-
-      gsap.to(bg, {
-        scale: targetZoom,
-        duration: 0.8,
-        ease: "power2.out",
-      });
+    // Cleanup function
+    return () => {
+      lenis.destroy();
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
+    // Removed lastScroll variable and logic, as they are mostly redundant 
+    // when using the built-in ScrollTrigger direction.
+  }, [])
 
-    content.addEventListener("scroll", onScroll);
-    return () => content.removeEventListener("scroll", onScroll);
-  }, []);
+  // useEffect(() => {
+  //   const content = contentRef.current;
+  //   const bg = bgRef.current;
+
+  //   const onScroll = () => {
+  //     const maxScroll = content.scrollHeight - content.clientHeight;
+  //     const progress = content.scrollTop / maxScroll;
+
+  //  const targetZoom = 1.18 - progress * 0.15; 
+
+  //     gsap.to(bg, {
+  //       scale: targetZoom,
+  //       duration: 0.8,
+  //       ease: "power2.out",
+  //     });
+  //   };
+
+  //   content.addEventListener("scroll", onScroll);
+  //   return () => content.removeEventListener("scroll", onScroll);
+  // }, []);
 
   return (
     <section

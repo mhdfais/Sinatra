@@ -5,125 +5,97 @@ import desert from "../assets/sinatra-desert2.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function DesertSection() {
+export default function DesertSection({smoother}) {
   const sectionRef = useRef(null);
   const desertRef = useRef(null);
   const contentRef = useRef(null);
   const bgRef = useRef(null);
-  const pinTriggerRef = useRef(null); 
 
-  // ===== PAGE LOAD ANIMATION =====
+  // ===== 1. INITIAL ENTRY ANIMATIONS =====
   useEffect(() => {
-    const tl = gsap.timeline({ delay: 0.25 });
+    const section = sectionRef.current;
+    const content = contentRef.current;
+    const bg = bgRef.current;
+    const desertImg = desertRef.current;
+
+    // A. Background & Desert Image Entry (On Load)
+    const tl = gsap.timeline({ delay: 0.2 });
 
     tl.fromTo(
-      bgRef.current,
+      bg,
       { scale: 1.06 },
       { scale: 1, duration: 1.4, ease: "power2.out" }
     );
 
     tl.fromTo(
-      desertRef.current,
+      desertImg,
       { y: 40, opacity: 0 },
       { y: 0, opacity: 1, duration: 1.2, ease: "power2.out" },
       "-=1"
     );
 
-    // tl.fromTo(
-    //   contentRef.current,
-    //   { y: 80, opacity: 0 },
-    //   { y: 0, opacity: 1, duration: 1.2, ease: "power2.out" },
-    //   "-=1"
+    // B. Text Content Entry (When section comes into view)
+    // gsap.fromTo(
+    //   content,
+    //   { y: 100, opacity: 0 },
+    //   {
+    //     y: 0,
+    //     opacity: 1,
+    //     // duration: 0.2,
+    //     ease: "power2.out",
+    //     scrollTrigger: {
+    //       trigger: section,
+    //       start: "top 80%", // Triggers slightly before the pinning starts
+    //       toggleActions: "play none none reverse",
+    //     },
+    //   }
     // );
   }, []);
 
-  // ===== PIN + INTERNAL SCROLL LOGIC =====
+  // ===== 2. SMOOTH SCROLL LOGIC (The Fix) =====
   useEffect(() => {
-    
     const section = sectionRef.current;
     const content = contentRef.current;
+    const desertImg = desertRef.current;
 
-    if (!section || !content) return;
-
-    // ensure content initially not scrollable (native)
-    content.style.overflowY = "hidden";
-    content.style.WebkitOverflowScrolling = "touch";
-
-    const getPinEnd = () => {
-      // adding a small buffer (50) to avoid off-by-one on some devices
-      return `+=${window.innerHeight}`;
-    };
-
-    gsap.fromTo(
-      contentRef.current,
-      { y: 250, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 1.2,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 40%", // when 35% of DesertSection enters screen
-          toggleActions: "play none none reverse",
-          
-        },
-      }
-    );
-
-    const trigger = ScrollTrigger.create({
-      trigger: section,
-      start: "top top",
-      end: getPinEnd,
-      pin: true,
-      pinSpacing: true,
-      anticipatePin: 0,
-      scrub: false, // we want native internal scrolling, not scrubbed animation
-      onEnter: () => {
-        // enable internal scroll when pinned
-        content.style.overflowY = "auto";
-         content.style.scrollBehavior = "smooth";
+    // Calculate how much the content overflows the screen
+    // We scroll ONLY the amount that is hidden
+    const getScrollDistance = () => content.scrollHeight - window.innerHeight;
+    // gsap.set(content, { y: 0, clearProps: "transform" });
+    // Create the Timeline
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top top",
+        // The pin lasts for the length of the content scroll + some buffer
+        end: () => `+=${getScrollDistance() + 100}`, 
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.8, // <--- This creates the smooth "weight"
+        invalidateOnRefresh: true, 
+        anticipatePin: 1
       },
-      onLeave: () => {
-        // leaving downward — disable internal scroll so page continues
-        content.style.overflowY = "hidden";
-        requestAnimationFrame(() => ScrollTrigger.update());
-      },
-      onEnterBack: () => {
-        // coming back up into the pinned area
-        content.style.overflowY = "auto";
-         content.style.scrollBehavior = "smooth";
-      },
-      onLeaveBack: () => {
-        content.style.overflowY = "hidden";
-        requestAnimationFrame(() => ScrollTrigger.update());
-      },
-      // small safety to avoid mismatch when layout changes
-      onRefresh: () => {
-        // ensure content overflow state recomputed after refresh
-        content.style.overflowY = ScrollTrigger.isRefreshing
-          ? "hidden"
-          : content.style.overflowY;
-      },
-      //   end: () => "+=" + (content.scrollHeight + -200)
     });
 
-    // store for cleanup
-    pinTriggerRef.current = trigger;
+    // 1. Move the Content Up
+    tl.to(content, {
+      y: () => -getScrollDistance(),
+      ease:"none", // Scrub controls easing, so this must be linear
+    });
 
-    // After initial render, refresh ScrollTrigger once (helps with image loading)
-    const refreshId = setTimeout(() => {
-      ScrollTrigger.refresh(true);
-    }, 120);
+    // Optional: Make the desert image move slightly slower for depth (Parallax)
+    // If you don't want the desert image to move at all, remove this part.
+    // tl.to(
+    //   desertImg,
+    //   {
+    //     y: -50, // Moves up slightly while scrolling
+    //     ease: "none",
+    //   },
+    //   "<" // Start at same time as content scroll
+    // );
 
-    // Cleanup on unmount
     return () => {
-      clearTimeout(refreshId);
-      if (pinTriggerRef.current) {
-        pinTriggerRef.current.kill();
-        pinTriggerRef.current = null;
-      }
-      ScrollTrigger.refresh();
+      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
 
@@ -133,17 +105,8 @@ export default function DesertSection() {
         ref={sectionRef}
         className="relative w-full h-screen overflow-hidden"
       >
-        {/* TOP FADE (subtle white top) */}
-        <div
-          className="
-          absolute top-0 left-0 w-full h-[9%]
-          pointer-events-none
-          bg-gradient-to-b
-          from-white
-          to-transparent
-          z-30
-        "
-        />
+        {/* TOP FADE */}
+        <div className="absolute top-0 left-0 w-full h-[9%] pointer-events-none bg-gradient-to-b from-white to-transparent z-30" />
 
         {/* BACKGROUND LIGHT BLUE */}
         <div
@@ -161,31 +124,15 @@ export default function DesertSection() {
           alt="desert"
           className="absolute bottom-0 left-1/2 h-[75vh] -translate-x-1/2 w-[140%] max-w-none z-20 pointer-events-none"
         />
-        <div
-          className="
-    absolute bottom-0 left-0 w-full h-[10%]
-    pointer-events-none
-    bg-gradient-to-t
-    from-white
-    to-transparent
-    z-30
-  "
-        ></div>
-
         
+        {/* Bottom Fade */}
+        <div className="absolute bottom-0 left-0 w-full h-[10%] pointer-events-none bg-gradient-to-t from-white to-transparent z-30"></div>
 
-        {/* SCROLLING CONTENT (will become scrollable only when pinned) */}
+        {/* SCROLLING CONTENT CONTAINER */}
+        {/* Important: overflow is HIDDEN now. We move this div via Transform. */}
         <div
           ref={contentRef}
-          className="absolute inset-0 z-10 flex flex-col items-center px-6 pt-10 h-full"
-           style={{
-            // start hidden; GSAP will toggle between 'hidden' and 'auto'
-            overflowY: "hidden",
-            scrollbarWidth: "none", // firefox
-            WebkitOverflowScrolling: "touch", // smooth touch scrolling
-            scrollBehavior: "smooth", // Add smooth scrolling
-            // overscrollBehavior: "contain", // Prevent scroll chaining
-          }}
+          className="absolute inset-0 z-10 flex flex-col items-center px-6 pt-10 h-full "
         >
           {/* main heading + intro */}
           <h1 className="text-4xl font-bold mb-4 text-black">About Sinatra</h1>
@@ -204,8 +151,8 @@ export default function DesertSection() {
             United <br /> Arab Emirates.
           </p>
 
-          {/* content block that can be scrolled */}
-          <div className="w-full max-w-7xl mx-auto py-16 px-6 pb-57">
+          {/* Extra Content */}
+          <div className="w-full max-w-7xl mx-auto py-16 px-6 pb-40">
             <div className="flex justify-between items-center gap-16">
               {/* LEFT COLUMN */}
               <div className="flex flex-col w-1/2 max-w-2xl">
@@ -247,6 +194,12 @@ export default function DesertSection() {
                 </a>
               </div>
             </div>
+            
+            {/* Spacer Div: 
+               This ensures the calculation allows you to scroll 
+               past the last element comfortably.
+            */}
+            <div className="h-[15vh]"></div>
           </div>
         </div>
       </section>

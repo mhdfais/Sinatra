@@ -21,6 +21,11 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 const Home = () => {
   const smootherRef = useRef(null);
   useEffect(() => {
+
+    ScrollTrigger.defaults({
+  wheelMultiplier: 0.5, 
+  touchMultiplier: 0.5 
+});
     // Create ScrollSmoother instance
     smootherRef.current = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",

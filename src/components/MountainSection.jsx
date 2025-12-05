@@ -15,135 +15,104 @@ export default function MountainSection() {
   const contentRef = useRef(null);
   const mountainRef = useRef(null);
   const skyRef = useRef(null);
-  const pinRef = useRef(null);
+  // pinRef is no longer needed since we kill the trigger in the cleanup
+  // const pinRef = useRef(null); 
 
   useEffect(() => {
     const section = sectionRef.current;
     const content = contentRef.current;
+    const mountainImg = mountainRef.current;
+    const sky = skyRef.current;
 
-    // Initial native scroll lock
-    content.style.overflowY = "hidden";
-    content.style.WebkitOverflowScrolling = "touch";
-
+    // Remove the initial native scroll lock and all native scroll logic,
+    // as we are using GSAP transforms now.
+    
     // Fade-in animation
     gsap
       .timeline({ delay: 0.25 })
       .fromTo(
-        skyRef.current,
+        sky,
         { opacity: 0, scale: 1.05 },
         { opacity: 1, scale: 1, duration: 1.3, ease: "power3.out" }
       )
       .fromTo(
-        mountainRef.current,
+        mountainImg,
         { opacity: 0, y: 50 },
         { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" },
         "-=1"
       );
 
     // Slide content in ONLY when section becomes visible
-    gsap.fromTo(
-      contentRef.current,
-      { y: 120, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 1.1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: section,
-          start: "top 45%",
-          toggleActions: "play none none reverse",
-        },
-      }
-    );
+    // gsap.fromTo(
+    //   content,
+    //   { y: 120, opacity: 0 },
+    //   {
+    //     y: 0,
+    //     opacity: 1,
+    //     duration: 1.1,
+    //     ease: "power2.out",
+    //     scrollTrigger: {
+    //       trigger: section,
+    //       start: "top 45%",
+    //       toggleActions: "play none none reverse",
+    //     },
+    //   }
+    // );
 
-    // ---- EXACT SAME PIN + INTERNAL SCROLL AS DESERT SECTION ----
-    const getPinEnd = () => `+=${window.innerHeight}`;
-    // section.dataset.canPin = "false";
-    const trigger = ScrollTrigger.create({
-      trigger: section,
-      start: "top top",
-      end: getPinEnd,
-      pin: true,
-      pinSpacing: true,
-      anticipatePin: 1,
-      scrub: false,
+    // --- 1. THE SMOOTH SCROLL LOGIC ---
+    // Calculate how much the content overflows the screen height
+    const getScrollDistance = () => content.scrollHeight - window.innerHeight;
 
-      onEnter: () => (content.style.overflowY = "auto"),
-      onLeave: () => {
-        content.style.overflowY = "hidden";
-        requestAnimationFrame(() => ScrollTrigger.update());
-      },
-      onEnterBack: () => (content.style.overflowY = "auto"),
-      onLeaveBack: () => {
-        content.style.overflowY = "hidden";
-        requestAnimationFrame(() => ScrollTrigger.update());
-      },
-
-      onRefresh: () => {
-        content.style.overflowY = ScrollTrigger.isRefreshing
-          ? "hidden"
-          : content.style.overflowY;
+    // Create the smooth scrolling timeline
+    const scrollTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top top",
+        // The section stays pinned for the duration of the content height
+        end: () => `+=${getScrollDistance() + 100}`,
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.8, // <--- THIS CONTROLS SMOOTHNESS (Try 1.5 for a smooth float)
+        invalidateOnRefresh: true, // Recalculate heights on resize
+        anticipatePin: 1,
+        
+        // 2. INTEGRATING BACKGROUND ZOOM LOGIC (from the removed useEffect)
+        onUpdate: (self) => {
+          const progress = self.progress; // 0 to 1
+          // We map the ScrollTrigger progress to the background scale animation
+          const targetZoom = 1.18 - progress * 0.15; 
+          gsap.set(sky, { scale: targetZoom });
+        }
       },
     });
 
-    pinRef.current = trigger;
-    window.mountainPin = trigger;
+    // Animate the content container's Y position
+    scrollTl.to(content, {
+      y: () => -getScrollDistance(),
+      ease: "none", // Must be linear when using scrub
+    });
 
-    setTimeout(() => ScrollTrigger.refresh(), 150);
+    // --- 3. TRANSITION/ZOOM EFFECT (Mountain Zoom Out) ---
+    // This timeline runs immediately AFTER the internal scroll pin is complete.
+    gsap.to(mountainImg, {
+      scale: 1.8,
+      y: 50, // Added slight vertical move for depth
+      ease: "none",
+      scrollTrigger: {
+        trigger: section,
+        // Start precisely when the internal scroll pin ends
+        start: () => scrollTl.scrollTrigger.end, 
+        end: `+=${window.innerHeight * 0.8}`, // Transition duration
+        scrub: 1, // Smooth transition
+      },
+    });
 
+    // Cleanup: Kill all ScrollTriggers created in this effect
     return () => {
-      if (pinRef.current) pinRef.current.kill();
-      ScrollTrigger.refresh();
+      ScrollTrigger.getAll().forEach(t => t.kill());
     };
-  }, []);
+  }, []); 
 
-  useEffect(() => {
-    const mountainImg = mountainRef.current;
-    const mountainSection = sectionRef.current;
-
-    const wait = setInterval(() => {
-      if (!window.mountainPin) return; // Wait for pin to exist
-      clearInterval(wait);
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: mountainSection,
-          start: () => window.mountainPin.end, // start AFTER internal scroll
-          end: "+=100%", // zoom duration
-          scrub: 1.2,
-        },
-      });
-
-      tl.to(mountainImg, {
-        scale: 1.8,
-        ease: "none",
-      });
-    }, 30);
-
-    return () => clearInterval(wait);
-  }, []);
-
-  useEffect(() => {
-    const content = contentRef.current;
-    const bg = skyRef.current;
-
-    const onScroll = () => {
-      const maxScroll = content.scrollHeight - content.clientHeight;
-      const progress = content.scrollTop / maxScroll;
-
-   const targetZoom = 1.18 - progress * 0.15; 
-
-      gsap.to(bg, {
-        scale: targetZoom,
-        duration: 0.8,
-        ease: "power2.out",
-      });
-    };
-
-    content.addEventListener("scroll", onScroll);
-    return () => content.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <div className="relative z-10">
@@ -184,10 +153,13 @@ export default function MountainSection() {
   "
         ></div>
 
-        {/* INTERNAL SCROLL CONTENT */}
+        {/* INTERNAL SCROLL CONTENT 
+             NOTE: Removed overflow-y-scroll from the className/style 
+             since we are using transforms for smooth scrolling now.
+        */}
         <div
           ref={contentRef}
-          className="absolute inset-0 z-10 overflow-y-scroll px-10 pt-35 "
+          className="absolute inset-0 z-10 px-10 pt-35"
           style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
         >
           {/* STATS */}
@@ -220,7 +192,7 @@ export default function MountainSection() {
           <div className="w-full text-center text-black pb-20">
             <h2 className="text-4xl font-bold mb-20">Our Companies</h2>
 
-            <div className="flex justify-between  opacity-90 px-20">
+            <div className="flex justify-between opacity-90 px-20">
               <img
                 src={swaplogo}
                 className="h-15 filter invert brightness-100"

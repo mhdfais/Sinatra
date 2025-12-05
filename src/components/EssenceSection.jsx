@@ -2,117 +2,112 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import starbg from "../assets/sinatra-stars-bg.jpg";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
 
 gsap.registerPlugin(ScrollTrigger);
-
 
 export default function EssenceSection() {
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
   const bgRef = useRef(null);
-  const pinTriggerRef = useRef(null);
 
- 
-
-  useEffect(() => {
-  const bg = bgRef.current;
-  const section = sectionRef.current;
-
-  if (!bg || !section) return;
-
-  // Zoom-in when section enters viewport
-  const entryTl = gsap.timeline({
-    scrollTrigger: {
-      trigger: section,
-      start: "top 80%", // starts before fully reaching section
-      end: "top top",
-      scrub: 1,
-    }
-  });
-
-  entryTl.fromTo(
-    bg,
-    { scale: 1 },
-    { scale: 1.3, ease: "none" }
-  );
-
-  return () => entryTl.scrollTrigger?.kill();
-}, []);
-
-  useEffect(() => {
+  // Function to set up the ScrollTrigger Pinning and parallax
+  const setupScrollTrigger = () => {
+    // Kill existing ScrollTriggers before creating new ones
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+    
+    const section = sectionRef.current;
     const content = contentRef.current;
     const bg = bgRef.current;
 
-    const onScroll = () => {
-      const maxScroll = content.scrollHeight - content.clientHeight;
-      const progress = content.scrollTop / maxScroll;
+    if (!section || !content || !bg) return;
 
-   const targetZoom = 1.15 - progress * 0.15; 
+    // Reset transform properties used in entry animation
+    gsap.set(content, { y: 0, clearProps: "transform" }); 
 
-      gsap.to(bg, {
-        scale: targetZoom,
-        duration: 0.8,
-        ease: "power2.out",
-      });
-    };
+    // Calculate how much the content overflows the screen
+    const getScrollDistance = () => content.scrollHeight - window.innerHeight;
 
-    content.addEventListener("scroll", onScroll);
-    return () => content.removeEventListener("scroll", onScroll);
-  }, []);
+    // Create the Timeline with smooth scrolling
+    const scrollTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top top",
+        end: () => `+=${getScrollDistance() + 100}`,
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.8, 
+        // invalidateOnRefresh: true,
+        //  anticipatePin: 1,
+        
+        // Background zoom logic integrated into ScrollTrigger
+        onUpdate: (self) => {
+          const progress = self.progress; // 0 to 1
+          // Background zoom out as we scroll: Starts at ~1.15, ends at ~1.00
+          // The formula maintains the scale linked to the scroll progress
+          const targetZoom = 1.15 - progress * 0.15;
+          gsap.set(bg, { scale: targetZoom });
+        },
+      },
+    });
 
+    // Move the Content Up as we scroll
+    scrollTl.to(content, {
+      y: () => -getScrollDistance(),
+      ease: "none", 
+    });
+  };
+
+
+  // ===== INITIAL ENTRY ANIMATIONS & SETUP =====
   useEffect(() => {
     const section = sectionRef.current;
     const content = contentRef.current;
+    const bg = bgRef.current;
 
-    if (!section || !content) return;
+    if (!section || !content || !bg) return;
+    
+    // --- SETUP INITIAL STATE ---
+    // Background starts slightly more zoomed and invisible
+    gsap.set(bg, { scale: 1.25, opacity: 0 }); 
+    // Content starts offset and invisible
+    gsap.set(content, { y: 100, opacity: 0 });
 
-    content.style.overflowY = "hidden";
+    // A. Background & Content Entry (On Load)
+    const entryTl = gsap.timeline({ 
+        delay: 0.25,
+        // *THE FIX*: Initialize ScrollTrigger only after entry is complete
+        onComplete: () => {
+             // A slight delay helps ensure DOM is fully painted before ScrollTrigger calculates layout
+             setTimeout(setupScrollTrigger, 50); 
+        }
+    });
+    
+    // 1. Background Animates TO the ScrollTrigger Start Scale (1.15)
+    entryTl.to(
+      bg,
+      { scale: 1.15, opacity: 1, duration: 1.4, ease: "power2.out" }
+    );
 
-    const getPinEnd = () => {
-      return `+=${window.innerHeight}`;
-    };
-
-    // Add a small delay to ensure AboutHero's ScrollTrigger is created first
-    const setupTimeout = setTimeout(() => {
-      const trigger = ScrollTrigger.create({
-        trigger: section,
-        start: "top top",
-        end: getPinEnd,
-        pin: true,
-        pinReparent: false, // Changed to false to avoid conflicts
-        pinSpacing: true,
-        anticipatePin: 1,
-
-        onEnter: () => {
-          content.style.overflowY = "auto";
-        },
-        onLeave: () => {
-          content.style.overflowY = "hidden";
-        },
-        onEnterBack: () => {
-          content.style.overflowY = "auto";
-        },
-        onLeaveBack: () => {
-          content.style.overflowY = "hidden";
-        },
-      });
-
-      pinTriggerRef.current = trigger;
-
-      setTimeout(() => ScrollTrigger.refresh(true), 150);
-    }, 100);
+    // 2. Content Animates In (Integrated into the main timeline)
+    entryTl.to(
+      content,
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1.2,
+        ease: "power2.out",
+      },
+      "-=1.0" // Start content animation towards the end of the background entry
+    );
 
     return () => {
-      clearTimeout(setupTimeout);
-      if (pinTriggerRef.current) pinTriggerRef.current.kill();
-      ScrollTrigger.refresh();
+      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
 
   return (
-    
-    <div className="relative z-10">
+    // ... JSX remains the same ...
+     <div className="relative z-10">
       <section
         id="essence-section"
         ref={sectionRef}
@@ -145,14 +140,14 @@ export default function EssenceSection() {
   "
         ></div>
 
-        {/* SCROLLABLE CONTENT */}
+        {/* SCROLLING CONTENT CONTAINER */}
+        {/* Important: overflow is HIDDEN now. We move this div via Transform. */}
         <div
           ref={contentRef}
-          className="absolute inset-0 z-10 h-full overflow-hidden px-10"
-          style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
+          className="absolute inset-0 z-10 flex flex-col px-10 h-full"
         >
           {/* BLOCK 1 */}
-          <div className="h-screen grid grid-rows-2 text-white px-30 py-15">
+          <div className="h-screen grid grid-rows-2 text-white px-30 pb-30 pt-10">
             <div className="flex items-center">
               <h2 className="text-5xl font-bold">
                 The Essence of Sinatra <br /> Holdings
@@ -175,7 +170,7 @@ export default function EssenceSection() {
           </div>
 
           {/* BLOCK 2 */}
-          <div className="h-screen grid grid-rows-2 text-white px-30 py-15">
+          <div className="h-screen grid grid-rows-2 text-white px-30 pb-30">
             <div className="flex items-center">
               <h2 className="text-5xl font-bold">Our Endeavors</h2>
             </div>
